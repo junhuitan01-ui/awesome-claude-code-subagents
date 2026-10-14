@@ -18,7 +18,7 @@ You type one command, `/deliver my-project`, and Claude runs every step, saves e
 | `CLAUDE.md` | Rules every step follows (no invented sources, disclose gaps, real files only) |
 | `templates/` | Project brief, deliverable spec and style guide to copy for each job |
 | `tools/check_deliverables.py` | Checks that output files exist, open and contain content |
-| `projects/` | One folder per job. `example-four-day-week/` is a complete test run |
+| `projects/` | One folder per job. Two example runs are included (see below) |
 
 ## Setup (once)
 
@@ -57,7 +57,9 @@ You need [Claude Code](https://code.claude.com/docs) installed and signed in, an
    - `projects/my-project/validation-report.md`: what passed, what failed, what's still uncertain. **Read this first.**
    - The numbered folders `01`–`06`: each step's working files, so you can see how the result was reached
 
-To see a finished run, open `projects/example-four-day-week/`.
+**Examples included:**
+- `projects/example-acme-pilot/`: a complete run from start to finish, using made-up company data supplied as files. It went through two revision rounds and produced all four files. Start with its `validation-report.md`.
+- `projects/example-four-day-week/`: a run where web pages couldn't be opened (the test machine blocked them). The researcher refused to cite sources it couldn't read, and the pipeline stopped after step 1 instead of inventing a report. This is what an honest failure looks like.
 
 ## Reusing it on other projects
 

@@ -17,3 +17,5 @@ build/
 !research-system/.claude/
 settings.local.json
 .claude_history
+# research-system build scripts are part of each project's record
+!research-system/projects/*/07-deliverables/build/
