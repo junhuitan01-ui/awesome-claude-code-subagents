@@ -16,8 +16,8 @@ You (the main Claude Code session) are the **orchestrator**. Subagents cannot ca
 |------|---------------------------|-------|--------|
 | 1a Research | `researcher` | `00-brief/` | `01-research/sources.md`, `research-notes.md` (`[S#]` IDs) |
 | 1b Independent research (runs alongside 1a, different angle) | `independent-researcher` | `00-brief/` only | `01-research/independent-sources.md`, `independent-research.md` (`[I#]` IDs) |
-| 1c Comparison pass | `independent-researcher` | its own report + `research-notes.md` | adds agreement / new-evidence sections to `independent-research.md` |
-| 2 Analyse | `analyst` | brief, both research reports | `02-analysis/analysis.md` |
+| 1c Debate (one round, both at once) | `researcher` + `independent-researcher` | the other side's report | `01-research/debate/primary-rebuttal.md`, `independent-rebuttal.md` |
+| 2 Judge + Analyse | `analyst` | brief, both reports, both rebuttals | `02-analysis/debate-verdict.md`, `analysis.md` |
 | 3 Write | `writer` | brief, research, analysis | `03-drafts/draft.md` |
 | 4 Review | `reviewer` | draft + everything above | `04-reviews/review-N.md` (PASS/REVISE + findings table) |
 | 5 Improve | `improver` | latest draft + review | `05-revised/revised-N.md`, `changes-N.md` |
@@ -25,7 +25,7 @@ You (the main Claude Code session) are the **orchestrator**. Subagents cannot ca
 | 7 Build | `builder` | formatted content, spec | `07-deliverables/*` (real files) + `build/` scripts |
 | 8 Validate | orchestrator | everything | `validation-report.md` |
 
-Steps 1a and 1b run as separate tasks, and both finish before step 2. The independent researcher always uses a different research angle from the primary researcher, but it must not manufacture disagreement.
+Steps 1a and 1b run as separate tasks. In 1c each researcher writes one rebuttal arguing its report is stronger; the debate is turn-based, because subagents can't message each other. The analyst judges it on argument, points, references, content and formatting (evidence weighted highest), and the winning report is the one presented, plus any losing-report points marked carry over. The independent researcher always uses a different research angle, but neither side may manufacture disagreement.
 
 Claude Code doesn't let subagents save report files, so steps 1–6 return their files as text between `=== FILE: … ===` markers and the orchestrator saves them. Only the builder writes files itself (its Python scripts and the deliverables).
 

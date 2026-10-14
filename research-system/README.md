@@ -3,10 +3,10 @@
 A set of eight Claude Code agents plus one command that take a written brief and produce researched, reviewed, professionally formatted files: a Word report, a PDF, a PowerPoint deck and an Excel workbook.
 
 ```
-Research + Independent research → Analyse → Write → Review ⇄ Improve (max 2 rounds) → Format → Build Materials → Final validation
+Research + Independent research → Debate → Judge & Analyse → Write → Review ⇄ Improve (max 2 rounds) → Format → Build Materials → Final validation
 ```
 
-Two researchers look into your questions separately: the main researcher, and an independent researcher who always takes a different angle and looks for counter-evidence. The Analyse step compares their two reports before drawing conclusions.
+Two researchers look into your questions separately: the main researcher, and an independent researcher who always takes a different angle and looks for counter-evidence. Then they debate: each reads the other's report and writes one reply arguing why its own is stronger. (It's turn-based, not a live chat, because Claude Code agents can't message each other.) The Analyse step judges the debate on argument, points, references, content and formatting, with evidence counting most, and the winning report is the one your final files are built from. Good points from the losing side that correct a mistake are still kept.
 
 You type one command, `/deliver my-project`, and Claude runs every step, saves each step's work in its own folder, and finishes with a validation report that lists anything missing, failed or unverified.
 

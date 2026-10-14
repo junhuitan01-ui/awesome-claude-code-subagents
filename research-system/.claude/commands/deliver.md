@@ -10,7 +10,7 @@ If no project name was given, list the folders in `projects/` and ask which one 
 ## 0. Read the brief (before anything else)
 1. Check `projects/$ARGUMENTS/00-brief/` contains `project-brief.md` and `deliverable-spec.md`. If either is missing or still has unfilled template text, stop and tell the user what to fill in. If `style-guide.md` is missing, copy `templates/style-guide.md` there.
 2. Read all three files and any source files in `00-brief/`.
-3. Create the work folders if missing, with one command: `mkdir -p projects/$ARGUMENTS/01-research projects/$ARGUMENTS/02-analysis projects/$ARGUMENTS/03-drafts projects/$ARGUMENTS/04-reviews projects/$ARGUMENTS/05-revised projects/$ARGUMENTS/06-formatted projects/$ARGUMENTS/07-deliverables/build`.
+3. Create the work folders if missing, with one command: `mkdir -p projects/$ARGUMENTS/01-research/debate projects/$ARGUMENTS/02-analysis projects/$ARGUMENTS/03-drafts projects/$ARGUMENTS/04-reviews projects/$ARGUMENTS/05-revised projects/$ARGUMENTS/06-formatted projects/$ARGUMENTS/07-deliverables/build`.
 4. Start `projects/$ARGUMENTS/pipeline-log.md` with: date, project name, the list of required deliverables (from "Files to deliver"), and the success criteria from the brief. Append one line per step below: step, agent, files produced, outcome.
 
 **Saving agent output.** Claude Code doesn't let subagents save report files, so the research, analysis, writing, review, improve and format agents return their files in their reply between `=== FILE: <path> ===` and `=== END FILE ===` markers. After each of those agents finishes, save every block yourself with the Write tool, exactly as returned (don't edit or summarise), at the path given. Check the path is inside `projects/$ARGUMENTS/`. If an expected file block is missing, ask the agent once more; if it's still missing, log it as a failed step. The builder is different: it writes its scripts and files itself.
@@ -19,25 +19,28 @@ If no project name was given, list the folders in `projects/` and ask which one 
 
 When you call each subagent, give it: the project folder path, the exact files to read and write, the relevant parts of the brief (questions, audience, deliverables), and the step number. Each subagent starts with no memory of earlier steps, so pass anything it needs.
 
-## 1. Research → `researcher` and `independent-researcher` (two separate tasks)
-Run two independent investigations of the same research questions, then a short comparison pass. Both must finish before step 2 starts.
+## 1. Research → `researcher` and `independent-researcher` (two separate tasks, then a debate)
+Run two independent investigations of the same research questions, then one debate round where each argues its report is stronger. All of it finishes before step 2 starts.
 
 **1a + 1b. Launch both researchers as separate tasks.** Issue the two subagent calls together in one message so they run in parallel and neither can see the other's output.
 - **Before launching, assign the angles and log them.** The `researcher` uses its default angle (official and primary sources first, answering each question directly). Choose a *different* angle for the `independent-researcher`, differing in at least two of: search strategy, source mix, analytical perspective (see its agent file for options), fitted to this brief. The independent angle must always differ from the primary one. Record both angles in `pipeline-log.md`.
 - `researcher`: pass the research questions from the brief. Returns `01-research/sources.md` and `research-notes.md` (source IDs `[S#]`).
 - `independent-researcher`: pass the same research questions, the brief's scope and any ethical limits, the deliverables it must support, the style guide path, and its assigned angle. Tell it not to read the primary research files. Returns `01-research/independent-sources.md` and `independent-research.md` (source IDs `[I#]`).
 
-**1c. Comparison pass.** Once both have finished, run `independent-researcher` once more in comparison-pass mode: it reads `research-notes.md`, fills in "Points of agreement" and "New evidence or perspectives", and updates its recommended issues. It returns the full updated file; it must not change its findings or the primary files.
-
-**Check the results.**
-- Save each researcher's file blocks as soon as it finishes (see "Saving agent output"), and save the comparison pass's updated `independent-research.md` over the first version. Confirm all four files exist. If the researchers report that web search or fetch was unavailable, record that in the log.
+**Check the research.**
+- Save each researcher's file blocks as soon as it finishes (see "Saving agent output"). Confirm all four files exist. If the researchers report that web search or fetch was unavailable, record that in the log.
 - If **neither** researcher found any verified evidence for the research questions, stop here and report to the user what was blocked and how to unblock it (for example, put the source documents in `00-brief/`). Don't continue to build files from no evidence.
-- If only **one** researcher found verified evidence, continue, record which one came back empty and why in the log, and carry it to the validation report as a limitation.
+- If only **one** researcher found verified evidence, skip the debate (1c), record which one came back empty and why in the log, and tell the analyst there is only one report to work from. Carry this to the validation report as a limitation.
 
-## 2. Analyse → `analyst`
-Pass both research reports: `research-notes.md` + `sources.md` and `independent-research.md` + `independent-sources.md`. The analyst must compare the two reports (agreement, disagreement, evidence quality, uncertainty) before drawing conclusions. Confirm `02-analysis/analysis.md` contains the "Comparison of the two research reports" section.
+**1c. Debate round.** Subagents can't message each other, so you run the debate in turns. Launch both calls together in one message, so neither sees the other's rebuttal:
+- `researcher` in debate mode: give it `independent-research.md` and `independent-sources.md` to rebut. Returns `01-research/debate/primary-rebuttal.md`.
+- `independent-researcher` in debate mode: give it `research-notes.md` and `sources.md` to rebut. Returns `01-research/debate/independent-rebuttal.md` and the full updated `independent-research.md` (save it over the first version).
+- One round only. Check each rebuttal cites only IDs that exist in the two sources files; if not, send it back once.
 
-If the analyst asks for more research on a specific gap, you may run the `researcher` (or the `independent-researcher`, if the gap is about counter-evidence) once more for that gap, then re-run the analyst. Only once.
+## 2. Judge and Analyse → `analyst`
+Pass both research reports, both sources files and both rebuttals. The analyst judges the debate on argument, points, references, content and formatting, picks the stronger report on evidence, then writes the analysis on top of it. Confirm `02-analysis/debate-verdict.md` (winner, scorecard, challenge rulings, strong points from the losing report) and `analysis.md` were returned and saved. Log the winner and the weighted totals.
+
+If the analyst asks for more research on a specific gap, you may run the `researcher` (or the `independent-researcher`, if the gap is about counter-evidence) once more for that gap, then re-run the analyst. Only once. Don't re-run the debate.
 
 ## 3. Write → `writer`
 Output: `03-drafts/draft.md` (+ slides outline / tables if needed).
@@ -64,7 +67,7 @@ Pass the list of "Files to deliver" from the spec. Confirm the builder ran `tool
    - **Brief requirements**: each success criterion | met / partly met / not met | evidence
    - **Unresolved review issues** (from the last review)
    - **Evidence gaps** (every `[EVIDENCE GAP]` marker and research gap, from both research reports)
-   - **Where the two research reports disagreed** and how the analysis resolved it, or that it is unresolved
+   - **Debate result**: which report won and its weighted score, plus any strong points from the losing report that were not carried into the deliverable
    - **Failed or skipped checks** and why
    - **Tools/capabilities that were unavailable** (e.g. web search, a library)
 
