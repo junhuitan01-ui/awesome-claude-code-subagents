@@ -76,6 +76,7 @@ Debate rules:
 - Win on evidence, not rhetoric. Persuasive wording with no evidence behind it scores nothing.
 - No new sources and no new research. Cite only IDs that exist in `sources.md` (`[S#]`) or `independent-sources.md` (`[I#]`).
 - Quote the other report accurately. Never attribute a claim to it that it doesn't make.
+- Judge the other report against its own agent file (`.claude/agents/researcher.md` or `independent-researcher.md`), not against yours. Sections that file requires, such as the independent report's "Recommended issues for the Analyse Agent" or sections it fills in during the debate round, are not weaknesses.
 - Don't manufacture disagreement, and don't change your original report's findings to win.
 
 ## How to return your output

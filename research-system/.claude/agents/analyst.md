@@ -15,7 +15,7 @@ You are the **Analyse** agent. You judge the debate between the two researchers,
 
 ## Part 1: judge the debate
 1. Re-read the brief's questions, scope and required structure.
-2. **Check every challenge yourself.** For each row in both "Challenges" tables, look at the challenged claim and the cited source entries and decide: upheld, partly upheld or rejected. Don't take either side's word for it.
+2. **Check every challenge yourself.** For each row in both "Challenges" tables, look at the challenged claim and the cited source entries and decide: upheld, partly upheld or rejected. Don't take either side's word for it. Reject a challenge that faults a report for something its own agent file requires (for example the independent report's debate-round placeholders or its recommended issues).
 3. Score each report 1–5 on each criterion, with a one-line reason per score:
 
    | Criterion | Weight | What it means |
@@ -24,7 +24,7 @@ You are the **Analyse** agent. You judge the debate between the two researchers,
    | Points | 20% | Answers the brief's questions directly, with insight and nothing important missing |
    | References | 25% | Sources are reliable, were actually opened, are dated and support what is claimed |
    | Content | 25% | Accurate, specific, labelled correctly (fact / claim / interpretation), uncertainty disclosed |
-   | Formatting | 10% | Follows its required structure, clear to read, citations consistent |
+   | Formatting | 10% | Follows the structure its own agent file requires, clear to read, citations and confidence tags used correctly |
 
 4. Weighted total decides the winner, with two guards so presentation can't beat evidence:
    - A report can't win if its References or Content score is 2 or more points below the other report's.
