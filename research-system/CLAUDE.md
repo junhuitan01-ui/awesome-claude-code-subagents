@@ -12,7 +12,7 @@ You (the main Claude Code session) are the **orchestrator**. Subagents cannot ca
 /deliver <project-name>
 ```
 
-| Step | Agent (`.claude/agents/`) | Reads | Writes |
+| Step | Agent (`.claude/agents/`) | Reads | Output saved to |
 |------|---------------------------|-------|--------|
 | 1 Research | `researcher` | `00-brief/` | `01-research/sources.md`, `research-notes.md` |
 | 2 Analyse | `analyst` | brief, research | `02-analysis/analysis.md` |
@@ -22,6 +22,8 @@ You (the main Claude Code session) are the **orchestrator**. Subagents cannot ca
 | 6 Format | `formatter` | approved draft, style guide | `06-formatted/report.md`, `slides.md`, `tables/*.csv` |
 | 7 Build | `builder` | formatted content, spec | `07-deliverables/*` (real files) + `build/` scripts |
 | 8 Validate | orchestrator | everything | `validation-report.md` |
+
+Claude Code doesn't let subagents save report files, so steps 1–6 return their files as text between `=== FILE: … ===` markers and the orchestrator saves them. Only the builder writes files itself (its Python scripts and the deliverables).
 
 Review → Improve repeats **at most twice**. Anything still open after that is reported as unresolved; the pipeline does not loop forever.
 
@@ -33,6 +35,7 @@ research-system/
 ├── README.md                 # setup + how to use
 ├── .claude/agents/           # the 7 specialist agents
 ├── .claude/commands/deliver.md   # the orchestrator pipeline (/deliver)
+├── .claude/settings.json     # pre-approves web search and the few simple commands the pipeline runs
 ├── templates/                # project brief, deliverable spec, style guide
 ├── tools/check_deliverables.py   # checks output files exist, open, have content
 └── projects/<name>/          # one folder per job
@@ -60,4 +63,5 @@ research-system/
 
 - One project = one folder under `projects/`. Start a new one by copying `templates/` files into `projects/<name>/00-brief/` and filling them in.
 - Don't edit earlier versions of a draft; each revision is a new file so the history is visible.
+- Run one plain Bash command per call (no `cd`, `&&`, loops), so the pre-approved permissions in `.claude/settings.json` match.
 - Keep agent instructions short and specific. If you change the pipeline, update both `.claude/commands/deliver.md` and the table above.

@@ -10,8 +10,12 @@ If no project name was given, list the folders in `projects/` and ask which one 
 ## 0. Read the brief (before anything else)
 1. Check `projects/$ARGUMENTS/00-brief/` contains `project-brief.md` and `deliverable-spec.md`. If either is missing or still has unfilled template text, stop and tell the user what to fill in. If `style-guide.md` is missing, copy `templates/style-guide.md` there.
 2. Read all three files and any source files in `00-brief/`.
-3. Create any missing work folders: `01-research 02-analysis 03-drafts 04-reviews 05-revised 06-formatted 07-deliverables`.
+3. Create the work folders if missing, with one command: `mkdir -p projects/$ARGUMENTS/01-research projects/$ARGUMENTS/02-analysis projects/$ARGUMENTS/03-drafts projects/$ARGUMENTS/04-reviews projects/$ARGUMENTS/05-revised projects/$ARGUMENTS/06-formatted projects/$ARGUMENTS/07-deliverables/build`.
 4. Start `projects/$ARGUMENTS/pipeline-log.md` with: date, project name, the list of required deliverables (from "Files to deliver"), and the success criteria from the brief. Append one line per step below: step, agent, files produced, outcome.
+
+**Saving agent output.** Claude Code doesn't let subagents save report files, so the research, analysis, writing, review, improve and format agents return their files in their reply between `=== FILE: <path> ===` and `=== END FILE ===` markers. After each of those agents finishes, save every block yourself with the Write tool, exactly as returned (don't edit or summarise), at the path given. Check the path is inside `projects/$ARGUMENTS/`. If an expected file block is missing, ask the agent once more; if it's still missing, log it as a failed step. The builder is different: it writes its scripts and files itself.
+
+**Bash commands.** Run one plain command per Bash call from the `research-system` folder (no `cd`, `&&`, pipes or loops). `.claude/settings.json` pre-approves only simple commands such as `python3 tools/check_deliverables.py ...`; anything else stops for the user's approval.
 
 When you call each subagent, give it: the project folder path, the exact files to read and write, the relevant parts of the brief (questions, audience, deliverables), and the step number. Each subagent starts with no memory of earlier steps, so pass anything it needs.
 

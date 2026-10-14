@@ -13,7 +13,9 @@ You are the **Build Materials** agent. You produce real files that open in norma
 - The style guide (fonts, colours) if it specifies any
 
 ## How to build
-Write a small Python script for each file in `projects/<name>/07-deliverables/build/`, run it with Bash, and save the output in `projects/<name>/07-deliverables/`. Keep the scripts, so the user can rebuild the files later.
+Write a small Python script for each file in `projects/<name>/07-deliverables/build/` (for example `build_pptx.py`), run it with Bash, and save the output in `projects/<name>/07-deliverables/`. Keep the scripts, so the user can rebuild the files later.
+
+Run each script as **one plain command from the `research-system` folder**, e.g. `python3 projects/<name>/07-deliverables/build/build_pptx.py`. Don't use `cd`, `&&`, `;`, loops or variables: the project's permission settings pre-approve only plain `python3 projects/...` commands, and anything else is blocked or needs the user's approval. Make each script work out its paths from its own location (`Path(__file__)`), not from the current folder.
 
 | Format | Preferred tool | Fallback |
 |--------|----------------|----------|
@@ -23,7 +25,7 @@ Write a small Python script for each file in `projects/<name>/07-deliverables/bu
 | .xlsx  | openpyxl (from the CSVs) | none — deliver the CSVs and report it |
 | .csv / .md | plain Python | — |
 
-Before building, check what's installed: `python3 -c "import docx, pptx, openpyxl, reportlab"`, plus `command -v pandoc soffice`. If a library is missing, you may install it with `python3 -m pip install <python-docx|python-pptx|openpyxl|reportlab>`. If that fails, use the fallback; if there is no fallback, **don't** create a fake file. Report the format as not built and why.
+Before building, check what's installed: `python3 -c "import docx, pptx, openpyxl, reportlab"`, plus `command -v pandoc` and `command -v soffice` (one command per Bash call). If a library is missing, you may install it with `python3 -m pip install <python-docx|python-pptx|openpyxl|reportlab>`. If that fails, use the fallback; if there is no fallback, **don't** create a fake file. Report the format as not built and why.
 
 ## Quality bar
 - Every file the spec lists is built with the exact name the spec gives (default: `report.docx`, `report.pdf`, `slides.pptx`, `data.xlsx`).

@@ -14,6 +14,7 @@ You type one command, `/deliver my-project`, and Claude runs every step, saves e
 |------|------------|
 | `.claude/agents/` | The seven specialist agents (researcher, analyst, writer, reviewer, improver, formatter, builder) |
 | `.claude/commands/deliver.md` | The orchestrator: the step-by-step pipeline `/deliver` runs |
+| `.claude/settings.json` | Pre-approves web search and the few plain commands the pipeline runs, so you get fewer permission prompts |
 | `CLAUDE.md` | Rules every step follows (no invented sources, disclose gaps, real files only) |
 | `templates/` | Project brief, deliverable spec and style guide to copy for each job |
 | `tools/check_deliverables.py` | Checks that output files exist, open and contain content |

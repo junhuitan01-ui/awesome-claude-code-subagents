@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(mkdir -p projects/*)",
+      "Bash(python3 tools/check_deliverables.py *)",
+      "Bash(python3 projects/*/07-deliverables/build/*)",
+      "Bash(python3 -c \"import docx, pptx, openpyxl, reportlab\")",
+      "Bash(command -v pandoc)",
+      "Bash(command -v soffice)"
+    ]
+  }
+}
