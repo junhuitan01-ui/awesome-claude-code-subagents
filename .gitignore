@@ -12,6 +12,8 @@ dist/
 build/
 *.egg-info/
 
-# Claude Code
+# Claude Code (personal settings only; research-system/.claude/ holds shared agents)
 .claude/
+!research-system/.claude/
+settings.local.json
 .claude_history
