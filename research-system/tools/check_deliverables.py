@@ -19,7 +19,7 @@ import sys
 import zipfile
 from pathlib import Path
 
-PLACEHOLDER_PATTERNS = [r"\[EVIDENCE GAP", r"\bTODO\b", r"\bTBD\b", r"lorem ipsum", r"\[S\d+\]"]
+PLACEHOLDER_PATTERNS = [r"\[EVIDENCE GAP", r"\bTODO\b", r"\bTBD\b", r"lorem ipsum", r"\[[SI]\d+\]"]
 
 
 def expected_files(project: Path):

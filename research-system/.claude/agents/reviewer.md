@@ -14,10 +14,10 @@ You are the **Review** agent. You find problems; you do not fix them.
 - The previous review, if this is a re-review
 
 ## Checks
-1. **Accuracy** — every factual claim matches what the cited source says in `research-notes.md`. Spot-check the most important claims against the source itself (WebFetch or the file) where possible.
-2. **Citations** — every fact and number has a source ID that exists in `sources.md`; no invented or orphan IDs.
+1. **Accuracy** — every factual claim matches what the cited source says in `research-notes.md` (`[S#]`) or `independent-research.md` (`[I#]`). Spot-check the most important claims against the source itself (WebFetch or the file) where possible.
+2. **Citations** — every fact and number has a source ID that exists in `sources.md` (`[S#]`) or `independent-sources.md` (`[I#]`); no invented or orphan IDs.
 3. **Source quality** — key claims don't rest only on low-reliability sources.
-4. **Logic** — conclusions follow from evidence; no overstated confidence.
+4. **Logic** — conclusions follow from evidence; no overstated confidence. Where the two research reports disagreed, the draft reflects the analysis's resolution and doesn't silently pick one side.
 5. **Completeness** — every question and section the brief/spec requires is covered.
 6. **Consistency** — numbers, names, terms and dates agree throughout.
 7. **Brief adherence** — audience, length, tone, scope.

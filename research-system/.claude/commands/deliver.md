@@ -19,11 +19,25 @@ If no project name was given, list the folders in `projects/` and ask which one 
 
 When you call each subagent, give it: the project folder path, the exact files to read and write, the relevant parts of the brief (questions, audience, deliverables), and the step number. Each subagent starts with no memory of earlier steps, so pass anything it needs.
 
-## 1. Research → `researcher`
-Pass the research questions from the brief. Afterwards confirm `01-research/sources.md` and `research-notes.md` exist. If the researcher reports that web search or fetch was unavailable, record that in the log. If it found **no verified evidence at all** for the research questions, stop here and report to the user what was blocked and how to unblock it (for example, put the source documents in `00-brief/`). Don't continue to build files from no evidence.
+## 1. Research → `researcher` and `independent-researcher` (two separate tasks)
+Run two independent investigations of the same research questions, then a short comparison pass. Both must finish before step 2 starts.
+
+**1a + 1b. Launch both researchers as separate tasks.** Issue the two subagent calls together in one message so they run in parallel and neither can see the other's output.
+- **Before launching, assign the angles and log them.** The `researcher` uses its default angle (official and primary sources first, answering each question directly). Choose a *different* angle for the `independent-researcher`, differing in at least two of: search strategy, source mix, analytical perspective (see its agent file for options), fitted to this brief. The independent angle must always differ from the primary one. Record both angles in `pipeline-log.md`.
+- `researcher`: pass the research questions from the brief. Returns `01-research/sources.md` and `research-notes.md` (source IDs `[S#]`).
+- `independent-researcher`: pass the same research questions, the brief's scope and any ethical limits, the deliverables it must support, the style guide path, and its assigned angle. Tell it not to read the primary research files. Returns `01-research/independent-sources.md` and `independent-research.md` (source IDs `[I#]`).
+
+**1c. Comparison pass.** Once both have finished, run `independent-researcher` once more in comparison-pass mode: it reads `research-notes.md`, fills in "Points of agreement" and "New evidence or perspectives", and updates its recommended issues. It returns the full updated file; it must not change its findings or the primary files.
+
+**Check the results.**
+- Save each researcher's file blocks as soon as it finishes (see "Saving agent output"), and save the comparison pass's updated `independent-research.md` over the first version. Confirm all four files exist. If the researchers report that web search or fetch was unavailable, record that in the log.
+- If **neither** researcher found any verified evidence for the research questions, stop here and report to the user what was blocked and how to unblock it (for example, put the source documents in `00-brief/`). Don't continue to build files from no evidence.
+- If only **one** researcher found verified evidence, continue, record which one came back empty and why in the log, and carry it to the validation report as a limitation.
 
 ## 2. Analyse → `analyst`
-If the analyst asks for more research on a specific gap, you may run the researcher once more for that gap, then re-run the analyst. Only once.
+Pass both research reports: `research-notes.md` + `sources.md` and `independent-research.md` + `independent-sources.md`. The analyst must compare the two reports (agreement, disagreement, evidence quality, uncertainty) before drawing conclusions. Confirm `02-analysis/analysis.md` contains the "Comparison of the two research reports" section.
+
+If the analyst asks for more research on a specific gap, you may run the `researcher` (or the `independent-researcher`, if the gap is about counter-evidence) once more for that gap, then re-run the analyst. Only once.
 
 ## 3. Write → `writer`
 Output: `03-drafts/draft.md` (+ slides outline / tables if needed).
@@ -44,12 +58,13 @@ Pass the list of "Files to deliver" from the spec. Confirm the builder ran `tool
 ## 8. Final validation (do this yourself, don't delegate)
 1. Run `python3 tools/check_deliverables.py projects/$ARGUMENTS --dump` with Bash.
 2. For each required file: it exists and passed the check; and its content meets the spec (required sections/slides/sheets present, length/slide limits, audience, citation style, references included). Compare the dumped text against the spec — don't assume.
-3. Spot-check three important numbers or claims in the final files against `01-research/research-notes.md`.
+3. Spot-check three important numbers or claims in the final files against `01-research/research-notes.md` or `independent-research.md` (whichever the citation points to).
 4. Write `projects/$ARGUMENTS/validation-report.md`:
    - **Deliverables**: table of file | status (PASS / FAIL / NOT BUILT / NOT VERIFIED) | what was checked
    - **Brief requirements**: each success criterion | met / partly met / not met | evidence
    - **Unresolved review issues** (from the last review)
-   - **Evidence gaps** (every `[EVIDENCE GAP]` marker and research gap)
+   - **Evidence gaps** (every `[EVIDENCE GAP]` marker and research gap, from both research reports)
+   - **Where the two research reports disagreed** and how the analysis resolved it, or that it is unresolved
    - **Failed or skipped checks** and why
    - **Tools/capabilities that were unavailable** (e.g. web search, a library)
 

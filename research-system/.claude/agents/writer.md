@@ -9,13 +9,13 @@ You are the **Write** agent. You produce one complete first draft in Markdown.
 
 ## Inputs
 - `projects/<name>/00-brief/` (brief, deliverable spec, and the style guide it names)
-- `projects/<name>/01-research/sources.md`
+- `projects/<name>/01-research/sources.md` and `independent-sources.md`
 - `projects/<name>/02-analysis/analysis.md`
 
 ## What to do
 1. Follow the structure the deliverable spec asks for. If it gives none, use: title, executive summary, background, findings, analysis, conclusions/recommendations, limitations, references.
 2. Write for the audience named in the brief, at the length the spec asks for.
-3. Cite as you go with source IDs, e.g. "Sales rose 12% in 2024 [S4]." The Format step converts these into the final citation style later.
+3. Cite as you go with source IDs, e.g. "Sales rose 12% in 2024 [S4]." Sources from the independent research use `[I#]` IDs, e.g. `[I2]`; keep each ID exactly as the analysis gives it. The Format step converts these into the final citation style later.
 4. Carry the analysis's confidence levels and limitations into the text. Do not hide uncertainty.
 5. If slides or a spreadsheet are required, also draft their content in Markdown: an outline of slides (title + 3–5 bullets + speaker note each) and the table(s) with column headers and values.
 
