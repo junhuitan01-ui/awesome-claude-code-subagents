@@ -1,0 +1,14 @@
+# FICTIONAL TEST DATA - Acme Widgets Ltd monthly operations data (exported from the ops dashboard, 3 July 2026)
+month,period,staff_headcount,units_shipped,on_time_delivery_pct,customer_complaints,sick_days_total
+2025-07,before,48,10120,93.1,14,61
+2025-08,before,48,9870,92.4,17,58
+2025-09,before,49,10340,93.8,12,66
+2025-10,before,49,10410,94.0,15,72
+2025-11,before,50,10650,93.5,13,79
+2025-12,before,50,9480,91.9,19,84
+2026-01,pilot,50,9910,92.7,16,52
+2026-02,pilot,50,10230,94.2,11,47
+2026-03,pilot,51,10580,95.0,10,44
+2026-04,pilot,51,10390,94.6,12,40
+2026-05,pilot,51,10720,95.3,9,38
+2026-06,pilot,51,10600,94.9,18,41
