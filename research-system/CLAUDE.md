@@ -14,14 +14,18 @@ You (the main Claude Code session) are the **orchestrator**. Subagents cannot ca
 
 | Step | Agent (`.claude/agents/`) | Reads | Output saved to |
 |------|---------------------------|-------|--------|
-| 1 Research | `researcher` | `00-brief/` | `01-research/sources.md`, `research-notes.md` |
-| 2 Analyse | `analyst` | brief, research | `02-analysis/analysis.md` |
+| 1a Research | `researcher` | `00-brief/` | `01-research/sources.md`, `research-notes.md` (`[S#]` IDs) |
+| 1b Independent research (runs alongside 1a, different angle) | `independent-researcher` | `00-brief/` only | `01-research/independent-sources.md`, `independent-research.md` (`[I#]` IDs) |
+| 1c Debate (one round, both at once) | `researcher` + `independent-researcher` | the other side's report | `01-research/debate/primary-rebuttal.md`, `independent-rebuttal.md` |
+| 2 Judge + Analyse | `analyst` | brief, both reports, both rebuttals | `02-analysis/debate-verdict.md`, `analysis.md` |
 | 3 Write | `writer` | brief, research, analysis | `03-drafts/draft.md` |
 | 4 Review | `reviewer` | draft + everything above | `04-reviews/review-N.md` (PASS/REVISE + findings table) |
 | 5 Improve | `improver` | latest draft + review | `05-revised/revised-N.md`, `changes-N.md` |
 | 6 Format | `formatter` | approved draft, style guide | `06-formatted/report.md`, `slides.md`, `tables/*.csv` |
 | 7 Build | `builder` | formatted content, spec | `07-deliverables/*` (real files) + `build/` scripts |
 | 8 Validate | orchestrator | everything | `validation-report.md` |
+
+Steps 1a and 1b run as separate tasks. In 1c each researcher writes one rebuttal arguing its report is stronger; the debate is turn-based, because subagents can't message each other. The analyst judges it on argument, points, references, content and formatting (evidence weighted highest), and the winning report is the one presented, plus any losing-report points marked carry over. The independent researcher always uses a different research angle, but neither side may manufacture disagreement.
 
 Claude Code doesn't let subagents save report files, so steps 1–6 return their files as text between `=== FILE: … ===` markers and the orchestrator saves them. Only the builder writes files itself (its Python scripts and the deliverables).
 
@@ -33,7 +37,7 @@ Review → Improve repeats **at most twice**. Anything still open after that is 
 research-system/
 ├── CLAUDE.md                 # this file
 ├── README.md                 # setup + how to use
-├── .claude/agents/           # the 7 specialist agents
+├── .claude/agents/           # the 8 specialist agents
 ├── .claude/commands/deliver.md   # the orchestrator pipeline (/deliver)
 ├── .claude/settings.json     # pre-approves web search and the few simple commands the pipeline runs
 ├── templates/                # project brief, deliverable spec, style guide
@@ -47,7 +51,7 @@ research-system/
 
 ## Honesty rules (apply to every step)
 
-1. **Never invent** research findings, sources, quotes, statistics, URLs or citations. Every fact traces to a source ID in `01-research/sources.md`.
+1. **Never invent** research findings, sources, quotes, statistics, URLs or citations. Every fact traces to a source ID in `01-research/sources.md` (`[S#]`) or `01-research/independent-sources.md` (`[I#]`).
 2. **Never claim a check passed** unless it was actually run and its output seen. Don't describe test results you didn't get.
 3. **Disclose gaps.** Missing evidence stays visible as `[EVIDENCE GAP: ...]` and is listed in the validation report.
 4. **Files, not descriptions.** Format and Build steps must write real files. If a file can't be built (missing library, no tool), say so; never create a placeholder file that pretends to be the deliverable.

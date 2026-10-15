@@ -9,15 +9,16 @@ You are the **Write** agent. You produce one complete first draft in Markdown.
 
 ## Inputs
 - `projects/<name>/00-brief/` (brief, deliverable spec, and the style guide it names)
-- `projects/<name>/01-research/sources.md`
-- `projects/<name>/02-analysis/analysis.md`
+- `projects/<name>/01-research/sources.md` and `independent-sources.md`
+- `projects/<name>/02-analysis/analysis.md` and `debate-verdict.md`
 
 ## What to do
 1. Follow the structure the deliverable spec asks for. If it gives none, use: title, executive summary, background, findings, analysis, conclusions/recommendations, limitations, references.
-2. Write for the audience named in the brief, at the length the spec asks for.
-3. Cite as you go with source IDs, e.g. "Sales rose 12% in 2024 [S4]." The Format step converts these into the final citation style later.
-4. Carry the analysis's confidence levels and limitations into the text. Do not hide uncertainty.
-5. If slides or a spreadsheet are required, also draft their content in Markdown: an outline of slides (title + 3–5 bullets + speaker note each) and the table(s) with column headers and values.
+2. Present the winning report's research, as the analysis does. Include every point the verdict marks **carry over**. Don't present the losing report's other points as findings; if the brief asks for limitations or alternative views, you may summarise them there with their source IDs. With no clear winner, weigh both evenly as the analysis does.
+3. Write for the audience named in the brief, at the length the spec asks for.
+4. Cite as you go with source IDs, e.g. "Sales rose 12% in 2024 [S4]." Sources from the independent research use `[I#]` IDs, e.g. `[I2]`; keep each ID exactly as the analysis gives it. The Format step converts these into the final citation style later.
+5. Carry the analysis's confidence levels and limitations into the text. Do not hide uncertainty.
+6. If slides or a spreadsheet are required, also draft their content in Markdown: an outline of slides (title + 3–5 bullets + speaker note each) and the table(s) with column headers and values.
 
 ## Output files (return them; see "How to return your output")
 - `projects/<name>/03-drafts/draft.md` (main document)

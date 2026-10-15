@@ -1,10 +1,12 @@
 # Research & Deliverables System
 
-A set of seven Claude Code agents plus one command that take a written brief and produce researched, reviewed, professionally formatted files: a Word report, a PDF, a PowerPoint deck and an Excel workbook.
+A set of eight Claude Code agents plus one command that take a written brief and produce researched, reviewed, professionally formatted files: a Word report, a PDF, a PowerPoint deck and an Excel workbook.
 
 ```
-Research → Analyse → Write → Review ⇄ Improve (max 2 rounds) → Format → Build Materials → Final validation
+Research + Independent research → Debate → Judge & Analyse → Write → Review ⇄ Improve (max 2 rounds) → Format → Build Materials → Final validation
 ```
+
+Two researchers look into your questions separately: the main researcher, and an independent researcher who always takes a different angle and looks for counter-evidence. Then they debate: each reads the other's report and writes one reply arguing why its own is stronger. (It's turn-based, not a live chat, because Claude Code agents can't message each other.) The Analyse step judges the debate on argument, points, references, content and formatting, with evidence counting most, and the winning report is the one your final files are built from. Good points from the losing side that correct a mistake are still kept.
 
 You type one command, `/deliver my-project`, and Claude runs every step, saves each step's work in its own folder, and finishes with a validation report that lists anything missing, failed or unverified.
 
@@ -12,7 +14,7 @@ You type one command, `/deliver my-project`, and Claude runs every step, saves e
 
 | Path | What it is |
 |------|------------|
-| `.claude/agents/` | The seven specialist agents (researcher, analyst, writer, reviewer, improver, formatter, builder) |
+| `.claude/agents/` | The eight specialist agents (researcher, independent-researcher, analyst, writer, reviewer, improver, formatter, builder) |
 | `.claude/commands/deliver.md` | The orchestrator: the step-by-step pipeline `/deliver` runs |
 | `.claude/settings.json` | Pre-approves web search and the few plain commands the pipeline runs, so you get fewer permission prompts |
 | `CLAUDE.md` | Rules every step follows (no invented sources, disclose gaps, real files only) |
@@ -35,7 +37,7 @@ You need [Claude Code](https://code.claude.com/docs) installed and signed in, an
    cd awesome-claude-code-subagents/research-system
    claude
    ```
-   Type `/agents` to confirm the seven agents are listed.
+   Type `/agents` to confirm the eight agents are listed.
 4. **Web search.** Research uses Claude Code's built-in web search and web fetch. Claude asks permission the first time; choose "allow". If your account has web search turned off, the system still runs but only uses files you give it, and it says so in the report.
 
 ## Example workflow
@@ -79,4 +81,4 @@ You need [Claude Code](https://code.claude.com/docs) installed and signed in, an
 - **Research quality depends on what Claude can reach.** Paywalled papers and sites that block automated access can't be read. They show up as "Not verified" in the research notes.
 - **Files are built by Python scripts.** If a library from step 2 is missing, that file type isn't built and the validation report says so. No other services or APIs are used.
 - **Validation checks structure and spot-checks facts.** It confirms files open, contain the required sections and match the research notes. It doesn't replace a human read-through before you send anything important.
-- **Long jobs use a lot of usage.** A full run calls seven agents, with up to three reviews. Start with a short brief.
+- **Long jobs use a lot of usage.** A full run calls eight agents (two researchers), with up to three reviews. Start with a short brief.
